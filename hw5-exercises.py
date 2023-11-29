@@ -247,7 +247,6 @@ def compare_day_lengths(date1, date2=None, latlng1=(47.653457, -122.307550), lat
     else:
         difference = "shorter"
 
-    # Creating the output message
     if date1 == date2 and latlng1 == latlng2:
         print("Cannot compare the same date and location.")
     elif date1 == date2 and latlng1 != latlng2:
