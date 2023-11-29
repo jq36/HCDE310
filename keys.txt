@@ -1,0 +1,24 @@
+You can get API_key from OPENAI. Here is the link: https://openai.com/blog/openai-api
+
+Step:
+1. Register and Log In:
+
+2. Visit the OpenAI website at https://openai.com.
+If you don't already have an account, you will need to register. Look for a sign-up or registration option.
+Complete the registration process by providing the necessary information, such as your email address, and create a password.
+Once your account is created, log in to the OpenAI platform.
+Access the API Dashboard:
+
+3. After logging in, navigate to the OpenAI API section. You can usually find this in the dashboard or in the services section.
+The direct link for the OpenAI API information and dashboard is https://openai.com/blog/openai-api. This page provides additional details and updates about the API.
+
+4. Request API Access:
+If OpenAI requires an application or approval process for API access, follow the instructions provided on the website to request access.
+This might include submitting a form or providing details about how you plan to use the API.
+
+5. Obtain Your API Key:
+Once you have access to the API, look for a section labeled something like “API Keys,” “Credentials,” or “Access Tokens.”
+Follow the instructions to generate a new API key. This usually involves clicking a button labeled “Create Key,” “Generate Key,” or something similar.
+
+Reminder: This process might take up to 10 mins to finish. If you don't want to get the api through by yourself,
+feel free to email me: jq36@uw.edu. I am happy to send the api_key to you.
