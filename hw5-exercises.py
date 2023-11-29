@@ -54,8 +54,15 @@ print('-------1a--------')
 # lat=47.658502&lng=-122.309483
 # (order of parameters and values may vary, the names and values should match!)
 #
-# Put your code here
+latitude = 47.658502
+longitude = -122.309483
 
+params = {
+    'lat': latitude,
+    'lng': longitude
+}
+result = urllib.parse.urlencode(params)
+print(result)
 
 print('-------1b--------')
 # (1b) Add (concatenate) the paremter string (the variable you created
@@ -68,8 +75,8 @@ print('-------1b--------')
 
 baseurl = 'https://api.sunrise-sunset.org/json'
 # Put your code here
-
-
+request_url = baseurl + "?" + result
+print(request_url)
 
 print('-------2--------')
 ## Grabbing data off the web
@@ -80,7 +87,10 @@ print('-------2--------')
 #      Print it out.
 # 
 # Put your code here
+with urllib.request.urlopen(request_url) as response:
+    request_url_response = response.read().decode()
 
+print(request_url_response)
 
 print('-------3--------')
 ## Converting a JSON string to a dictionary
@@ -95,7 +105,8 @@ print('-------3--------')
 #
 
 # Put your code here
-
+data = json.loads(request_url_response)
+pprint.pprint(data)
 
 
 print('-------4--------')
@@ -110,7 +121,13 @@ print('-------4--------')
 #      when you query.
 
 # put your code here
+sunrise = data['results']['sunrise']
+sunset = data['results']['sunset']
+day_length = data['results']['day_length']
 
+print(f"Sunrise: {sunrise}")
+print(f"Sunset: {sunset}")
+print(f"Day Length: {day_length}")
 
 print('-------5a--------')
 
@@ -136,10 +153,24 @@ print('-------5a--------')
 # differs in some important ways, such as not requiring an API key.
 #
 # Put your code here
+def get_day_data(lat=47.653457, lng=-122.307550, date=None, formatted=0):
+    params = {
+        'lat': lat,
+        'lng': lng,
+        'formatted': formatted
+    }
 
-#
+    if date:
+        params['date'] = date
+
+    append_url = urllib.parse.urlencode(params)
+    full_url = baseurl + '?' + append_url
+
+    with urllib.request.urlopen(full_url) as response:
+        return json.loads(response.read().decode())
+
 # The following line of code tests get_day_data() with all default values:
-# pprint.pprint(get_day_data())
+pprint.pprint(get_day_data())
 
 print('-------5b--------')
 # (5b) Write another function called compare_day_lengths().
@@ -197,21 +228,48 @@ print('-------5b--------')
 # the test code to try it out.
 #
 # Put your code here
+def compare_day_lengths(date1, date2=None, latlng1=(47.653457, -122.307550), latlng2=None):
+    if date2 is None:
+        date2 = date1
+    if latlng2 is None:
+        latlng2 = latlng1
 
+    day_data1 = get_day_data(latlng1[0], latlng1[1], date1)
+    day_data2 = get_day_data(latlng2[0], latlng2[1], date2)
+
+    day_length1 = day_data1['results']['day_length']
+    day_length2 = day_data2['results']['day_length']
+
+    gap = abs(day_length2 - day_length1)
+
+    if day_length2 > day_length1:
+        difference = "longer"
+    else:
+        difference = "shorter"
+
+    # Creating the output message
+    if date1 == date2 and latlng1 == latlng2:
+        print("Cannot compare the same date and location.")
+    elif date1 == date2 and latlng1 != latlng2:
+        print(f"{date2}, at {round(latlng2[0], 4)}, {round(latlng2[1], 4)}, will be {gap} seconds {difference} than at {round(latlng1[0], 4)}, {round(latlng1[1], 4)}.")
+    elif date1 != date2 and latlng1 != latlng2:
+        print(f"{date2}, at {round(latlng2[0], 4)}, {round(latlng2[1], 4)}, will be {gap} seconds {difference} than {date1} at {round(latlng1[0], 4)}, {round(latlng1[1], 4)}.")
+    elif date1 != date2 and latlng1 == latlng2:
+        print(f"{date2}, at {round(latlng2[0], 4)}, {round(latlng2[1], 4)}, will be {gap} seconds {difference} than {date1}.")
 # The following lines test compare_day_lengths():
 
-# print("Compare the day the assignment is posted to when it is due:")
-# compare_day_lengths(date1="2023-02-15",date2="2023-02-22")
-# print("Compare the first day of class to the last:")
-# compare_day_lengths(date1="2023-01-03",date2="2023-03-09")
-# print("Compare Halloween and Thanksgiving 2022 at Rainier Vista")
-# compare_day_lengths(date1="2022-10-31",date2="2022-11-24")
-# print("Compare first day of the quarter at UW with the first day of the quarter at UofO:")
-# compare_day_lengths(date1="2023-01-03",date2="2023-01-04",latlng2=(44.04468909342273,-123.07273968820778))
-# print("Compare the last day of our quarter at UW and WSU:")
-# compare_day_lengths(date1="2023-03-09",latlng2=(46.73176814034095,-117.1605623031192))
-# print("Compare the same day and time:")
-# compare_day_lengths(date1="2022-10-31")
+print("Compare the day the assignment is posted to when it is due:")
+compare_day_lengths(date1="2023-02-15",date2="2023-02-22")
+print("Compare the first day of class to the last:")
+compare_day_lengths(date1="2023-01-03",date2="2023-03-09")
+print("Compare Halloween and Thanksgiving 2022 at Rainier Vista")
+compare_day_lengths(date1="2022-10-31",date2="2022-11-24")
+print("Compare first day of the quarter at UW with the first day of the quarter at UofO:")
+compare_day_lengths(date1="2023-01-03",date2="2023-01-04",latlng2=(44.04468909342273,-123.07273968820778))
+print("Compare the last day of our quarter at UW and WSU:")
+compare_day_lengths(date1="2023-03-09",latlng2=(46.73176814034095,-117.1605623031192))
+print("Compare the same day and time:")
+compare_day_lengths(date1="2022-10-31")
 
 print('-------6--------')
 print( '-------6a--------')
@@ -223,8 +281,10 @@ print( '-------6a--------')
 #      urllib.error.URLError exceptions, and print out the appropriate
 #      reason or error code
 #
-#x = urllib.request.urlopen('http://hcde.washington.edu/hcdestuff')
-
+try:
+    x = urllib.request.urlopen('http://hcde.washington.edu/hcdestuff')
+except urllib.error.HTTPError as e:
+    print('HTTP Error:', e.code, e.reason)
 
 print('-------6b--------')
 # (6b) Define a function get_day_data_safe(). It calls get_day_data, but
@@ -235,12 +295,24 @@ print('-------6b--------')
 #      a server, it should say that.
 #
 # Put your code here
-
+def get_day_data_safe(lat=47.653457, lng=-122.307550, date=None, formatted=0):
+    try:
+        return get_day_data(lat, lng, date, formatted)
+    except urllib.error.HTTPError as e:
+        print("Error trying to retrieve data.")
+        print("HTTP Error:", e.code, e.reason)
+    except urllib.error.URLError as e:
+        print("Error trying to retrieve data.")
+        print('Reason:', e.reason)
+    except Exception as e:
+        print("Error trying to retrieve data.")
+        print("Error details:", str(e))
+    return None
 
 # Uncomment the following code to test get_day_data_safe():
 # There's no 13th month, so this last one should generate an error.
-# pprint.pprint(get_day_data_safe())
-# pprint.pprint(get_day_data_safe(date="2022-13-01"))
+pprint.pprint(get_day_data_safe())
+pprint.pprint(get_day_data_safe(date="2022-13-01"))
 
 print('-------6c--------')
 # (6c) Now define a function compare_day_lengths_safe() that calls
@@ -253,10 +325,22 @@ print('-------6c--------')
 # More information: https://docs.python.org/3/library/urllib.error.html
 # 
 # Put your code here
-        
+def compare_day_lengths_safe(date1, date2):
+    try:
+        return compare_day_lengths(date1, date2)
+    except urllib.error.HTTPError as e:
+        print("Error trying to retrieve data.")
+        print("HTTP Error:", e.code, e.reason)
+    except urllib.error.URLError as e:
+        print("Error trying to retrieve data.")
+        print('Reason:', e.reason)
+    except Exception as e:
+        print("Error trying to retrieve data.")
+        print("Error details:", str(e))
+    return None
 # Uncomment the following code to test it.
-# compare_day_lengths_safe(date1="2023-01-03",date2="2023-03-09")
-# compare_day_lengths_safe(date1="2023-13-25",date2="2023-12-43")
+compare_day_lengths_safe(date1="2023-01-03",date2="2023-03-09")
+compare_day_lengths_safe(date1="2023-13-25",date2="2023-12-43")
 
 print('-------6d--------')
 # (6d) Now, compare two dates at locations/dates of interest to you.
@@ -270,4 +354,5 @@ print('-------6d--------')
 # on a point to copy the location. 
 #
 # Put your code here
-
+print("I picked how much days shortened at the start/end point at Hongkong.")
+compare_day_lengths(date1="2023-01-01", date2="2023-12-30", latlng1=(22.396427,114.109497))
