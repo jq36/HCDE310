@@ -125,9 +125,9 @@ sunrise = data['results']['sunrise']
 sunset = data['results']['sunset']
 day_length = data['results']['day_length']
 
-print(f"Sunrise: {sunrise}")
-print(f"Sunset: {sunset}")
-print(f"Day Length: {day_length}")
+print(f"sunrise: {sunrise}")
+print(f"sunset: {sunset}")
+print(f"day_length: {day_length}")
 
 print('-------5a--------')
 
@@ -284,6 +284,7 @@ print( '-------6a--------')
 try:
     x = urllib.request.urlopen('http://hcde.washington.edu/hcdestuff')
 except urllib.error.HTTPError as e:
+    print("The server couldn't fulfill the request.")
     print('HTTP Error:', e.code, e.reason)
 
 print('-------6b--------')
