@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Search Results for "{{ ingredients|join(', ') }}"</h2>
+    {% if error %}
+        <div id="error">{{ error }}</div>
+    {% else %}
+        {% if search_results %}
+            <ul>
+                {% for recipe in search_results %}
+                    <li>
+                        <h3>{{ recipe['Name'] }}</h3>
+                        <p id="subtitle">Ingredients:</p>
+                        <ul>
+                            {% for item in ingredients %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                        <p id="subtitle">Steps:</p>
+                        <ol>
+                            {% for step_number, step_description in recipe['Steps'].items() %}
+                                <li>{{ step_description }}</li>
+                            {% endfor %}
+                        </ol>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button id="back" onclick="window.location.href='/';">Start New Search</button>
+        {% else %}
+            <p id="error">No results were found for the ingredients "{{ ingredients|join(', ') }}".</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

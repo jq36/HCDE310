@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="/results" method="post">
+        <p>
+            <label for="ingredient">Ingredients (separate with commas):</label>
+            <input type="text" id="ingredient" name="ingredient" required placeholder="Enter an ingredient" aria-label="Ingredient">
+        </p>
+        <p>
+            <input type="submit" value="SUBMIT" class="submit-button">
+        </p>
+    </form>
+{% endblock %}

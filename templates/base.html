@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}FoodSentry - Personalize recipe recommendation{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Give me some ingredient, I will give you the recipe recommendation</h1>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+        Data from <a href="https://www.openai.com/">OpenAI</a>
+    </footer>
+</body>
+</html>
